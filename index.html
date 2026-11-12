@@ -1,5 +1,7 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +9,101 @@
     <title>Password Security Analyzer & Generator</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Password Input */
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .password-wrapper input {
+            width: 100%;
+            padding: 12px 48px 12px 12px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            transition: 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .password-wrapper input.invalid {
+            border: 2px solid #e53935;
+            box-shadow: 0 0 5px rgba(229, 57, 53, 0.2);
+        }
+
+        .password-wrapper input.valid {
+            border: 2px solid #16a34a;
+            box-shadow: 0 0 5px rgba(22, 163, 74, 0.2);
+        }
+
+        .eye-button {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: #666;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .eye-button:hover {
+            color: #2563eb;
+        }
+
+        /* Live Security Analyzer */
+        .password-result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f5f5f5;
+        }
+
+        .password-result h3 {
+            margin-bottom: 12px;
+        }
+
+        #strength-text {
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 18px;
+        }
+
+        #strength-progress {
+            width: 0%;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .live-checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .live-checklist li {
+            margin: 10px 0;
+            font-size: 15px;
+        }
+
+        #security-message {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -15,9 +112,7 @@
     <header class="header">
         <div class="container">
 
-            <div class="logo">
-                🔐
-            </div>
+            <div class="logo">🔐</div>
 
             <h1>Password Security Analyzer</h1>
 
@@ -31,7 +126,6 @@
 
     <!-- Main Content -->
     <main class="container">
-
 
         <!-- Introduction -->
         <section class="intro">
@@ -52,7 +146,6 @@
         </section>
 
 
-
         <!-- Analyzer Section -->
         <section class="card">
 
@@ -62,19 +155,84 @@
                 Enter a password below to review the characteristics of a secure password.
             </p>
 
+            <label for="password">Password</label>
 
-            <label for="password">
-                Password
-            </label>
+            <!-- Password Input with Eye Button -->
+            <div class="password-wrapper">
 
-            <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Enter your password"
-            >
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    autocomplete="off"
+                >
+
+                <button
+                    type="button"
+                    id="togglePassword"
+                    class="eye-button"
+                    aria-label="Show password"
+                >
+
+                    <svg
+                        id="eyeIcon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/>
+                        <circle cx="12" cy="12" r="3"/>
+
+                    </svg>
+
+                </button>
+
+            </div>
 
 
+            <!-- Live Password Security Results -->
+            <div id="password-result" class="password-result">
+
+                <h3>🔐 Password Security Check</h3>
+
+                <p id="strength-text">
+                    Enter a password to begin analysis.
+                </p>
+
+                <div class="progress-bar">
+                    <div id="strength-progress"></div>
+                </div>
+
+                <ul class="live-checklist">
+
+                    <li id="length">✗ At least 12 characters</li>
+
+                    <li id="uppercase">✗ Contains uppercase letters</li>
+
+                    <li id="lowercase">✗ Contains lowercase letters</li>
+
+                    <li id="number">✗ Contains numbers</li>
+
+                    <li id="special">✗ Contains special characters</li>
+
+                    <li id="common">✗ Avoids common passwords</li>
+
+                </ul>
+
+                <p id="security-message"></p>
+
+            </div>
+
+
+            <!-- Privacy Notice -->
             <div class="notice">
 
                 <strong>Privacy Notice</strong>
@@ -97,60 +255,46 @@
                     <span>1</span>
                     <div>
                         <strong>Very Weak</strong>
-                        <p>
-                            Short, common or predictable passwords.
-                        </p>
+                        <p>Short, common or predictable passwords.</p>
                     </div>
                 </div>
-
 
                 <div class="strength weak">
                     <span>2</span>
                     <div>
                         <strong>Weak</strong>
-                        <p>
-                            Password needs significant improvement.
-                        </p>
+                        <p>Password needs significant improvement.</p>
                     </div>
                 </div>
-
 
                 <div class="strength fair">
                     <span>3</span>
                     <div>
                         <strong>Fair</strong>
-                        <p>
-                            Some security characteristics are present.
-                        </p>
+                        <p>Some security characteristics are present.</p>
                     </div>
                 </div>
-
 
                 <div class="strength strong">
                     <span>4</span>
                     <div>
                         <strong>Strong</strong>
-                        <p>
-                            Long and difficult to predict.
-                        </p>
+                        <p>Long and difficult to predict.</p>
                     </div>
                 </div>
-
 
                 <div class="strength very-strong">
                     <span>5</span>
                     <div>
                         <strong>Very Strong</strong>
-                        <p>
-                            Long, unique and highly unpredictable.
-                        </p>
+                        <p>Long, unique and highly unpredictable.</p>
                     </div>
                 </div>
 
             </div>
 
 
-            <!-- Password Requirements -->
+            <!-- Security Checklist -->
             <h3>Security Checklist</h3>
 
             <div class="checklist">
@@ -195,7 +339,6 @@
         </section>
 
 
-
         <!-- Generator Section -->
         <section class="card">
 
@@ -204,7 +347,6 @@
             <p class="section-description">
                 Use the examples below as a guide for creating strong passwords.
             </p>
-
 
             <div class="generator-box">
 
@@ -230,33 +372,16 @@
 
                 </div>
 
-
                 <h3>Character Types</h3>
 
                 <div class="character-types">
 
-                    <div>
-                        <span>✓</span>
-                        Uppercase Letters
-                    </div>
-
-                    <div>
-                        <span>✓</span>
-                        Lowercase Letters
-                    </div>
-
-                    <div>
-                        <span>✓</span>
-                        Numbers
-                    </div>
-
-                    <div>
-                        <span>✓</span>
-                        Special Characters
-                    </div>
+                    <div><span>✓</span> Uppercase Letters</div>
+                    <div><span>✓</span> Lowercase Letters</div>
+                    <div><span>✓</span> Numbers</div>
+                    <div><span>✓</span> Special Characters</div>
 
                 </div>
-
 
                 <h3>Example Strong Passwords</h3>
 
@@ -264,7 +389,6 @@
                     ⚠ These are examples only. Do not use these exact passwords
                     for real accounts.
                 </p>
-
 
                 <div class="password-example">
                     <code>River!Cloud7-Mango$Tree</code>
@@ -281,7 +405,6 @@
             </div>
 
         </section>
-
 
 
         <!-- Security Tips -->
@@ -302,7 +425,6 @@
                     </div>
                 </div>
 
-
                 <div class="tip">
                     <span>02</span>
                     <div>
@@ -312,7 +434,6 @@
                         </p>
                     </div>
                 </div>
-
 
                 <div class="tip">
                     <span>03</span>
@@ -324,7 +445,6 @@
                     </div>
                 </div>
 
-
                 <div class="tip">
                     <span>04</span>
                     <div>
@@ -335,7 +455,6 @@
                         </p>
                     </div>
                 </div>
-
 
                 <div class="tip">
                     <span>05</span>
@@ -350,7 +469,6 @@
             </div>
 
         </section>
-
 
 
         <!-- Attack Information -->
@@ -368,7 +486,6 @@
                     </p>
                 </div>
 
-
                 <div class="attack">
                     <h3>Dictionary Attack</h3>
                     <p>
@@ -377,7 +494,6 @@
                     </p>
                 </div>
 
-
                 <div class="attack">
                     <h3>Credential Stuffing</h3>
                     <p>
@@ -385,7 +501,6 @@
                         attempted on other websites.
                     </p>
                 </div>
-
 
                 <div class="attack">
                     <h3>Password Spraying</h3>
@@ -400,7 +515,6 @@
         </section>
 
 
-
         <!-- How It Works -->
         <section class="card">
 
@@ -411,16 +525,10 @@
                 <div class="process-step">
                     <span>1</span>
                     <h3>Password Creation</h3>
-                    <p>
-                        A user creates a password for an account.
-                    </p>
+                    <p>A user creates a password for an account.</p>
                 </div>
 
-
-                <div class="arrow">
-                    →
-                </div>
-
+                <div class="arrow">→</div>
 
                 <div class="process-step">
                     <span>2</span>
@@ -431,11 +539,7 @@
                     </p>
                 </div>
 
-
-                <div class="arrow">
-                    →
-                </div>
-
+                <div class="arrow">→</div>
 
                 <div class="process-step">
                     <span>3</span>
@@ -450,26 +554,24 @@
         </section>
 
 
-
-        <!-- Project Limitations -->
+        <!-- Project Scope -->
         <section class="card">
 
             <h2>📌 Project Scope</h2>
 
             <p>
-                This version of the project uses only HTML and CSS.
-                Because JavaScript and backend programming are not used,
-                real-time password scoring and automatic random password
-                generation are not implemented.
+                This project uses HTML, CSS and JavaScript to provide real-time
+                password analysis, security-rule validation and password-strength
+                feedback. The analyzer evaluates password characteristics directly
+                in the browser without sending or storing the entered password.
             </p>
 
             <p>
-                The project focuses on password-security education, interface
-                design, password requirements and cybersecurity awareness.
+                The project focuses on password-security education, password
+                requirements and cybersecurity awareness.
             </p>
 
         </section>
-
 
 
         <!-- Footer -->
@@ -477,13 +579,9 @@
 
             <h3>🔐 Password Security Analyzer & Generator</h3>
 
-            <p>
-                Educational Cybersecurity Project
-            </p>
+            <p>Educational Cybersecurity Project</p>
 
-            <p>
-                Built using HTML5 and CSS3
-            </p>
+            <p>Built using HTML5, CSS3 and JavaScript</p>
 
             <p class="copyright">
                 © 2026 Password Security Analyzer
@@ -492,6 +590,220 @@
         </footer>
 
     </main>
+
+
+    <!-- JavaScript -->
+    <script>
+
+        const passwordInput = document.getElementById("password");
+
+        const togglePassword = document.getElementById("togglePassword");
+
+        const eyeIcon = document.getElementById("eyeIcon");
+
+
+        // SHOW AND HIDE PASSWORD
+
+        togglePassword.addEventListener("click", function () {
+
+            if (passwordInput.type === "password") {
+
+                passwordInput.type = "text";
+
+                eyeIcon.innerHTML = `
+                    <path d="M3 3l18 18"/>
+                    <path d="M10.6 10.6a2 2 0 002.8 2.8"/>
+                    <path d="M9.9 5.2A11 11 0 0112 5c6.5 0 10 7 10 7a14 14 0 01-3 3.8"/>
+                    <path d="M6.2 6.2C3.5 8 2 12 2 12s3.5 7 10 7a10 10 0 003-.5"/>
+                `;
+
+                togglePassword.setAttribute("aria-label", "Hide password");
+
+            } else {
+
+                passwordInput.type = "password";
+
+                eyeIcon.innerHTML = `
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                `;
+
+                togglePassword.setAttribute("aria-label", "Show password");
+
+            }
+
+        });
+
+
+        // REAL-TIME PASSWORD ANALYSIS
+
+        passwordInput.addEventListener("input", function () {
+
+            const password = passwordInput.value;
+
+            // Security rules
+
+            const commonPasswords = [
+                "password",
+                "password123",
+                "12345678",
+                "123456789",
+                "qwerty",
+                "admin",
+                "letmein",
+                "welcome"
+            ];
+
+            const checks = {
+
+                length: password.length >= 12,
+
+                uppercase: /[A-Z]/.test(password),
+
+                lowercase: /[a-z]/.test(password),
+
+                number: /[0-9]/.test(password),
+
+                special: /[^A-Za-z0-9]/.test(password),
+
+                common: !commonPasswords.includes(password.toLowerCase())
+
+            };
+
+
+            // UPDATE CHECKLIST
+
+            for (let rule in checks) {
+
+                const item = document.getElementById(rule);
+
+                const originalText = item.textContent.substring(2);
+
+                if (checks[rule]) {
+
+                    item.textContent = "✓ " + originalText;
+
+                    item.style.color = "green";
+
+                } else {
+
+                    item.textContent = "✗ " + originalText;
+
+                    item.style.color = "red";
+
+                }
+
+            }
+
+
+            // CALCULATE SECURITY SCORE
+
+            const score = Object.values(checks).filter(Boolean).length;
+
+
+            // HIGHLIGHT PASSWORD INPUT
+
+            if (password.length === 0) {
+
+                passwordInput.classList.remove("valid", "invalid");
+
+            } else if (score === 6) {
+
+                passwordInput.classList.remove("invalid");
+
+                passwordInput.classList.add("valid");
+
+            } else {
+
+                passwordInput.classList.remove("valid");
+
+                passwordInput.classList.add("invalid");
+
+            }
+
+
+            // STRENGTH INDICATOR
+
+            const strengthText = document.getElementById("strength-text");
+
+            const progress = document.getElementById("strength-progress");
+
+            const message = document.getElementById("security-message");
+
+
+            const strengthLevels = [
+
+                "Very Weak",
+                "Weak",
+                "Fair",
+                "Strong",
+                "Very Strong",
+                "Very Strong",
+                "Very Strong"
+
+            ];
+
+
+            const colors = [
+
+                "#dc2626",
+                "#ef4444",
+                "#f97316",
+                "#eab308",
+                "#22c55e",
+                "#16a34a",
+                "#15803d"
+
+            ];
+
+
+            // EMPTY PASSWORD
+
+            if (password.length === 0) {
+
+                strengthText.textContent =
+                    "Enter a password to begin analysis.";
+
+                progress.style.width = "0%";
+
+                message.textContent = "";
+
+                return;
+
+            }
+
+
+            // DISPLAY STRENGTH
+
+            strengthText.textContent =
+                "Password Strength: " + strengthLevels[score];
+
+            progress.style.width = (score / 6 * 100) + "%";
+
+            progress.style.backgroundColor = colors[score];
+
+
+            // DISPLAY FINAL RESULT
+
+            if (score === 6) {
+
+                message.textContent =
+                    "✓ All basic security checks passed!";
+
+                message.style.color = "green";
+
+            } else {
+
+                message.textContent =
+                    "⚠ Your password needs improvement. Follow the rules above.";
+
+                message.style.color = "red";
+
+            }
+
+        });
+
+    </script>
 
 </body>
 </html>
